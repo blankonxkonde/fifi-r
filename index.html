@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Untuk Fifi ❤</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,800;1,9..144,600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fbf3ec; --card:#fffdf9; --ink:#2b1d14; --muted:#8a7565;
+    --accent:#e0592a; --pink:#e8577e; --pink-soft:#fde4ea;
+    --purple:#7a4fd6; --purple-soft:#ece4fb; --line:#eadfce;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .screen{min-height:100vh;min-height:100dvh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px 18px}
+  .screen.on{display:flex}
+  .btn{border:0;background:var(--pink);color:#fff;font:inherit;font-weight:700;font-size:16px;padding:14px 28px;border-radius:999px;cursor:pointer;box-shadow:0 8px 20px -10px rgba(232,87,126,.8)}
+  .btn:active{transform:scale(.97)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);box-shadow:none}
+  .btn:disabled{opacity:.6}
+
+  /* Welcome */
+  #welcome{text-align:center;background:radial-gradient(circle at 50% 30%,#fff2f5 0,var(--bg) 70%)}
+  .hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+  .hearts span{position:absolute;bottom:-40px;font-size:22px;animation:float linear infinite;opacity:.55}
+  @keyframes float{to{transform:translateY(-115vh) rotate(25deg)}}
+  .big-heart{font-size:64px;animation:beat 1.4s ease-in-out infinite}
+  @keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.15)}30%{transform:scale(1)}45%{transform:scale(1.1)}}
+  .hello{font-family:"Fraunces",serif;font-weight:800;font-size:clamp(30px,7vw,48px);line-height:1.1;margin:18px 0 6px;letter-spacing:-.02em}
+  .hello em{font-style:italic;color:var(--pink);font-weight:600}
+  .msg{font-size:19px;color:var(--ink);margin:6px auto 28px;max-width:420px;line-height:1.5}
+  .meta{color:var(--muted);font-size:14px;margin-top:18px}
+  .welcome-actions{display:flex;flex-direction:column;gap:10px;align-items:center;position:relative}
+
+  /* Quiz */
+  #quiz{justify-content:flex-start;padding-top:18px}
+  .top{width:100%;max-width:440px;display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .back{border:0;background:#fff;border:1.5px solid var(--line);width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer;color:var(--ink);flex:none}
+  .back:disabled{opacity:.3}
+  .track{flex:1;height:8px;background:#efe3d2;border-radius:99px;overflow:hidden}
+  .fill{height:100%;background:var(--pink);transition:width .35s}
+  .count{font-size:13px;color:var(--muted);font-weight:700;min-width:48px;text-align:right}
+  .stage{width:100%;max-width:440px;position:relative}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:0 20px 40px -28px rgba(80,40,10,.45)}
+  .card.in{animation:slideIn .35s cubic-bezier(.2,.8,.2,1)}
+  .card.back-in{animation:slideBack .35s cubic-bezier(.2,.8,.2,1)}
+  @keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+  @keyframes slideBack{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
+  .photo{aspect-ratio:4/3;background:#f3e8d8 center/cover no-repeat;position:relative;display:grid;place-items:center;font-size:72px}
+  .cat{position:absolute;top:12px;left:12px;background:rgba(255,253,249,.94);font-size:12px;font-weight:700;padding:5px 11px;border-radius:99px}
+  .credit{position:absolute;bottom:6px;right:9px;font-size:10px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);text-decoration:none;opacity:.85}
+  .body{padding:18px 18px 20px;display:flex;flex-direction:column;gap:14px}
+  .q{color:var(--muted);font-size:14px;margin:0}
+  .name{font-family:"Fraunces",serif;font-weight:800;font-size:30px;margin:2px 0 0;line-height:1.1;letter-spacing:-.01em}
+  .opts{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+  .chip{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:12px 0;font:inherit;font-weight:700;font-size:18px;cursor:pointer;color:var(--ink);transition:all .12s}
+  .chip:hover{border-color:var(--pink)}
+  .chip.on{background:var(--pink);border-color:var(--pink);color:#fff}
+  .scale{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:-6px}
+  .never{width:100%;font-size:15px;padding:12px}
+  .never.on{background:var(--ink);border-color:var(--ink)}
+  .try{display:none;background:var(--purple-soft);border-radius:16px;padding:14px;gap:10px;flex-direction:column}
+  .try.show{display:flex;animation:pop .25s}
+  @keyframes pop{from{opacity:0;transform:translateY(-6px)}}
+  .try .q{color:var(--purple);font-weight:700}
+  .try .chip.on{background:var(--purple);border-color:var(--purple)}
+  .try .scale{color:var(--purple)}
+  textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;font-size:14px;resize:none;min-height:44px;background:#fff}
+  .note-hint{font-size:12px;color:var(--muted);margin:-8px 0 0}
+  .skip{align-self:center;background:none;border:0;color:var(--muted);font:inherit;font-size:14px;text-decoration:underline;cursor:pointer}
+
+  /* Done */
+  #done{text-align:center}
+  #done h2{font-family:"Fraunces",serif;font-size:36px;margin:12px 0 6px}
+  #done p{color:var(--muted);margin:0 0 20px}
+  .sheet{width:100%;max-width:460px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px;text-align:left}
+  .sheet pre{background:#f6eee2;border-radius:12px;padding:12px;white-space:pre-wrap;font-size:13px;max-height:40vh;overflow:auto;margin:0;font-family:inherit}
+  .row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .status{font-size:14px;color:var(--muted);text-align:center;min-height:20px}
+</style>
+</head>
+<body>
+
+<!-- WELCOME -->
+<section class="screen on" id="welcome">
+  <div class="hearts" id="hearts"></div>
+  <div class="big-heart">💗</div>
+  <h1 class="hello">Halo sayangku<br><em>Fifi Restifiani</em></h1>
+  <p class="msg">tolong kerjain ini yaa sayang &lt;3</p>
+  <div class="welcome-actions">
+    <button class="btn" id="startBtn">Mulai yuk 💕</button>
+    <button class="btn ghost" id="restartBtn" style="display:none">Ulang dari awal</button>
+  </div>
+  <p class="meta" id="meta"></p>
+</section>
+
+<!-- QUIZ -->
+<section class="screen" id="quiz">
+  <div class="top">
+    <button class="back" id="backBtn" aria-label="Kembali">←</button>
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <div class="count" id="count"></div>
+  </div>
+  <div class="stage" id="stage"></div>
+</section>
+
+<!-- DONE -->
+<section class="screen" id="done">
+  <div class="big-heart">🥰</div>
+  <h2>Makasih sayang!</h2>
+  <p>Udah selesai semua. Love you ❤</p>
+  <div class="sheet">
+    <pre id="out"></pre>
+    <div class="status" id="status"></div>
+    <div class="row">
+      <button class="btn ghost" id="editBtn">Ubah jawaban</button>
+      <button class="btn ghost" id="waBtn">Kirim via WhatsApp</button>
+      <button class="btn" id="gsBtn" style="display:none">Simpan lagi</button>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ===== GOOGLE SHEET =====
+   Tempel URL Web App dari Apps Script (berakhiran /exec) di sini.
+   Kalau diisi, jawaban otomatis tersimpan ke Google Sheet saat selesai.
+*/
+const SCRIPT_URL = "";
+
+/* ===== DATA =====
+   name : nama yang tampil
+   wiki : judul artikel Wikipedia untuk ambil foto ("id:..." atau "en:...")
+   img  : (opsional) URL foto sendiri kalau mau ganti
+*/
+const DATA = {
+  makanan: [
+    {name:"Pecel", wiki:["id:Pecel","en:Pecel"]},
+    {name:"Sushi", wiki:["en:Sushi"]},
+    {name:"Ramen", wiki:["en:Ramen"]},
+    {name:"Okonomiyaki", wiki:["en:Okonomiyaki"]},
+    {name:"Yakitori", wiki:["en:Yakitori"]},
+    {name:"Gyudon", wiki:["en:Gyūdon"]},
+    {name:"Udon", wiki:["en:Udon"]},
+    {name:"Gultik (Gulai Tikungan)", wiki:["id:Gulai","en:Gulai"]},
+    {name:"Sate Ayam", wiki:["id:Sate ayam","en:Satay"]},
+    {name:"Sate Padang", wiki:["id:Sate Padang","en:Sate Padang"]},
+    {name:"Mie Ayam", wiki:["id:Mi ayam","en:Mie ayam"]},
+    {name:"Mie Aceh", wiki:["id:Mi Aceh","en:Mie aceh"]},
+    {name:"Bakso", wiki:["id:Bakso","en:Bakso"]},
+    {name:"Nasi Goreng", wiki:["id:Nasi goreng","en:Nasi goreng"]},
+    {name:"Ketoprak", wiki:["id:Ketoprak (makanan)","en:Ketoprak"]},
+    {name:"Korean BBQ", wiki:["en:Korean barbecue"]},
+    {name:"Nasi Padang", wiki:["id:Nasi Padang","en:Nasi Padang"]},
+    {name:"Rendang", wiki:["id:Rendang","en:Rendang"]},
+    {name:"Soto Ayam", wiki:["id:Soto ayam","en:Soto ayam"]},
+    {name:"Soto Betawi", wiki:["id:Soto betawi","en:Soto betawi"]},
+    {name:"Coto Makassar", wiki:["id:Coto Makassar","en:Coto makassar"]},
+    {name:"Gado-gado", wiki:["id:Gado-gado","en:Gado-gado"]},
+    {name:"Nasi Uduk", wiki:["id:Nasi uduk","en:Nasi uduk"]},
+    {name:"Ayam Geprek", wiki:["id:Ayam geprek","en:Ayam geprek"]},
+    {name:"Rawon", wiki:["id:Rawon","en:Rawon"]},
+    {name:"Gudeg", wiki:["id:Gudeg","en:Gudeg"]},
+    {name:"Nasi Kuning", wiki:["id:Nasi kuning","en:Nasi kuning"]},
+    {name:"Bubur Ayam", wiki:["id:Bubur ayam","en:Bubur ayam"]},
+    {name:"Lontong Sayur", wiki:["id:Lontong sayur","en:Lontong sayur"]},
+    {name:"Ketupat Sayur", wiki:["id:Ketupat sayur","en:Ketupat sayur","en:Ketupat"]},
+    {name:"Nasi Kucing (Angkringan)", wiki:["id:Nasi kucing","en:Nasi kucing"]},
+    {name:"Steak", wiki:["en:Steak"]}
+  ],
+  snack: [
+    {name:"Takoyaki", wiki:["en:Takoyaki"]},
+    {name:"Siomay", wiki:["id:Siomai","en:Siomay"]},
+    {name:"Batagor", wiki:["id:Batagor","en:Batagor"]},
+    {name:"Dimsum", wiki:["en:Dim sum"]},
+    {name:"Martabak Manis", wiki:["id:Martabak manis","en:Apam balik"]},
+    {name:"Martabak Telur", wiki:["id:Martabak telur","en:Murtabak"]},
+    {name:"Kerak Telor", wiki:["id:Kerak telor","en:Kerak telor"]},
+    {name:"Pempek", wiki:["id:Pempek","en:Pempek"]},
+    {name:"Seblak", wiki:["id:Seblak","en:Seblak"]},
+    {name:"Tteokbokki", wiki:["en:Tteok-bokki"]},
+    {name:"Tahu Gejrot", wiki:["id:Tahu gejrot","en:Tahu gejrot"]},
+    {name:"Cilok", wiki:["id:Cilok","en:Cilok"]},
+    {name:"Cireng", wiki:["id:Cireng","en:Cireng"]},
+    {name:"Pisang Goreng", wiki:["id:Pisang goreng","en:Pisang goreng"]},
+    {name:"Kue Cubit", wiki:["id:Kue cubit","en:Kue cubit"]},
+    {name:"Serabi", wiki:["id:Serabi","en:Serabi"]},
+    {name:"Croffle", wiki:["en:Croffle"]},
+    {name:"Corndog Korea", wiki:["en:Korean corn dog","en:Corn dog"]},
+    {name:"Taiyaki", wiki:["en:Taiyaki"]},
+    {name:"Mochi", wiki:["en:Mochi"]},
+    {name:"Bingsu", wiki:["en:Bingsu"]},
+    {name:"Es Campur", wiki:["id:Es campur","en:Es campur"]}
+  ]
+};
+const NAMA = "Fifi Restifiani";
+
+/* ===== STATE ===== */
+const ITEMS = [
+  ...DATA.makanan.map(x=>({...x, kategori:"Makanan"})),
+  ...DATA.snack.map(x=>({...x, kategori:"Snack"}))
+];
+const KEY = "rate-fifi-v1";
+let S = {answers:{}, idx:0};
+try { S = Object.assign(S, JSON.parse(localStorage.getItem(KEY)) || {}); } catch(e){}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} };
+const k = i => ITEMS[i].kategori + ":" + ITEMS[i].name;
+const $ = id => document.getElementById(id);
+
+/* ===== FOTO (Wikipedia) ===== */
+const photoCache = {};
+async function findPhoto(item){
+  if (item.img) return {src:item.img};
+  if (photoCache[item.name] !== undefined) return photoCache[item.name];
+  for (const w of item.wiki){
+    const [lang, ...rest] = w.split(":");
+    try{
+      const r = await fetch(`https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(rest.join(":").replace(/ /g,"_"))}`);
+      if (!r.ok) continue;
+      const j = await r.json();
+      const t = j.thumbnail || j.originalimage;
+      if (t && t.source){
+        return photoCache[item.name] = {src:t.source.replace(/\/\d+px-/,"/800px-"), fallback:t.source, page:j.content_urls?.desktop?.page};
+      }
+    }catch(e){}
+  }
+  return photoCache[item.name] = null;
+}
+function preload(i){ if (ITEMS[i]) findPhoto(ITEMS[i]).then(p=>{ if(p){ new Image().src = p.src; } }); }
+
+/* ===== SCREENS ===== */
+function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on", s.id===id)); window.scrollTo(0,0); }
+
+function initWelcome(){
+  const h = $("hearts");
+  for (let i=0;i<14;i++){
+    const s = document.createElement("span");
+    s.textContent = ["💗","💕","❤️","💖"][i%4];
+    s.style.left = Math.random()*100 + "%";
+    s.style.animationDuration = (7 + Math.random()*8) + "s";
+    s.style.animationDelay = (-Math.random()*12) + "s";
+    s.style.fontSize = (16 + Math.random()*18) + "px";
+    h.appendChild(s);
+  }
+  const answered = Object.keys(S.answers).filter(x=>S.answers[x]?.r).length;
+  if (answered > 0){
+    $("startBtn").textContent = answered >= ITEMS.length ? "Lihat hasil 💕" : "Lanjutkan 💕";
+    $("restartBtn").style.display = "";
+    $("meta").textContent = `${answered} dari ${ITEMS.length} udah dijawab`;
+  } else {
+    $("meta").textContent = `${ITEMS.length} menu · cuma tap-tap aja kok`;
+  }
+}
+
+/* ===== SLIDE ===== */
+let advancing = false;
+function renderSlide(dir="in"){
+  const i = S.idx, item = ITEMS[i], a = S.answers[k(i)] || {};
+  $("fill").style.width = (i / ITEMS.length * 100) + "%";
+  $("count").textContent = `${i+1}/${ITEMS.length}`;
+  $("backBtn").disabled = i === 0;
+
+  $("stage").innerHTML = `
+    <div class="card ${dir}">
+      <div class="photo"><span class="cat">${item.kategori==="Makanan"?"🍛 Makanan":"🍡 Snack"}</span><span class="emo">${item.kategori==="Makanan"?"🍛":"🍡"}</span></div>
+      <div class="body">
+        <div>
+          <p class="q">Menurut kamu, seberapa enak…</p>
+          <h2 class="name">${item.name}?</h2>
+        </div>
+        <textarea id="note" placeholder="Catatan (opsional), tulis dulu sebelum pilih nilai">${a.c||""}</textarea>
+        <div class="opts r">${[1,2,3,4,5].map(n=>`<button class="chip ${a.r===n?"on":""}" data-v="${n}">${n}</button>`).join("")}</div>
+        <div class="scale"><span>kurang suka</span><span>enak banget</span></div>
+        <button class="chip never ${a.r==="never"?"on":""}" data-v="never">Belum pernah coba</button>
+        <div class="try ${a.r==="never"?"show":""}">
+          <p class="q">Seberapa pengen nyoba?</p>
+          <div class="opts t">${[1,2,3,4,5].map(n=>`<button class="chip ${a.t===n?"on":""}" data-v="${n}">${n}</button>`).join("")}</div>
+          <div class="scale"><span>gak mau</span><span>pengen banget</span></div>
+        </div>
+      </div>
+    </div>`;
+
+  const card = $("stage").firstElementChild;
+  $("note").oninput = e => { S.answers[k(i)] = {...S.answers[k(i)], c:e.target.value}; save(); };
+
+  card.querySelectorAll(".r .chip, .never").forEach(b=>b.onclick=()=>{
+    if (advancing) return;
+    const v = b.dataset.v === "never" ? "never" : +b.dataset.v;
+    const prev = S.answers[k(i)] || {};
+    S.answers[k(i)] = {...prev, r:v};
+    if (v !== "never") delete S.answers[k(i)].t;
+    save();
+    card.querySelectorAll(".r .chip, .never").forEach(x=>x.classList.toggle("on", x===b));
+    const tryBox = card.querySelector(".try");
+    if (v === "never"){ tryBox.classList.add("show"); }
+    else { tryBox.classList.remove("show"); next(); }
+  });
+  card.querySelectorAll(".t .chip").forEach(b=>b.onclick=()=>{
+    if (advancing) return;
+    S.answers[k(i)] = {...S.answers[k(i)], t:+b.dataset.v}; save();
+    card.querySelectorAll(".t .chip").forEach(x=>x.classList.toggle("on", x===b));
+    next();
+  });
+
+  findPhoto(item).then(p=>{
+    if (!p || S.idx !== i) return;
+    const ph = card.querySelector(".photo");
+    const im = new Image();
+    im.onload = () => {
+      ph.style.backgroundImage = `url("${im.src}")`;
+      ph.querySelector(".emo")?.remove();
+      if (p.page){ const l=document.createElement("a"); l.className="credit"; l.href=p.page; l.target="_blank"; l.textContent="Wikipedia"; ph.appendChild(l); }
+    };
+    im.onerror = () => { if (p.fallback && im.src !== p.fallback) im.src = p.fallback; };
+    im.src = p.src;
+  });
+  preload(i+1); preload(i+2);
+}
+
+function next(){
+  advancing = true;
+  setTimeout(()=>{
+    advancing = false;
+    if (S.idx < ITEMS.length - 1){ S.idx++; save(); renderSlide("in"); }
+    else { S.idx = ITEMS.length - 1; save(); finish(); }
+  }, 380);
+}
+
+/* ===== HASIL ===== */
+function summary(){
+  let txt = `🍽️ Hasil Rate Makanan — ${NAMA}\n`;
+  let cat = "";
+  ITEMS.forEach((item,i)=>{
+    if (item.kategori !== cat){ cat = item.kategori; txt += `\n${cat==="Makanan"?"🍛 MAKANAN":"🍡 SNACK"}\n`; }
+    const a = S.answers[k(i)] || {};
+    let v = "-";
+    if (a.r === "never") v = "Belum pernah" + (a.t ? ` (mau coba: ${a.t}/5)` : "");
+    else if (a.r) v = "⭐".repeat(a.r) + ` ${a.r}/5`;
+    txt += `• ${item.name}: ${v}${a.c?` — ${a.c}`:""}\n`;
+  });
+  return txt;
+}
+
+function rowsForSheet(){
+  return ITEMS.map((item,i)=>{
+    const a = S.answers[k(i)] || {};
+    if (!a.r && !a.c) return null;
+    return {nama:NAMA, kategori:item.kategori, menu:item.name,
+      rating: a.r === "never" ? "Belum pernah" : (a.r || ""), mauCoba: a.t || "", catatan: a.c || ""};
+  }).filter(Boolean);
+}
+
+async function sendToSheet(){
+  if (!SCRIPT_URL) return;
+  const rows = rowsForSheet();
+  if (!rows.length) return;
+  $("status").textContent = "Menyimpan ke Google Sheet…";
+  $("gsBtn").disabled = true;
+  try{
+    await fetch(SCRIPT_URL, {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify({rows})});
+    $("status").textContent = "Tersimpan ✓";
+    S.sentAt = Date.now(); save();
+  }catch(e){
+    $("status").textContent = "Gagal menyimpan, coba tekan Simpan lagi.";
+  }
+  $("gsBtn").disabled = false;
+}
+
+function finish(){
+  $("fill").style.width = "100%";
+  $("out").textContent = summary();
+  show("done");
+  if (SCRIPT_URL){ $("gsBtn").style.display = ""; sendToSheet(); }
+}
+
+/* ===== EVENTS ===== */
+$("startBtn").onclick = ()=>{
+  const answered = Object.keys(S.answers).filter(x=>S.answers[x]?.r).length;
+  if (answered >= ITEMS.length){ finish(); return; }
+  // lanjut ke menu pertama yang belum dijawab
+  const firstEmpty = ITEMS.findIndex((_,i)=>!S.answers[k(i)]?.r);
+  S.idx = firstEmpty === -1 ? 0 : firstEmpty; save();
+  show("quiz"); renderSlide("in");
+};
+$("restartBtn").onclick = ()=>{
+  if (!confirm("Hapus semua jawaban dan mulai dari awal?")) return;
+  S = {answers:{}, idx:0}; save(); show("quiz"); renderSlide("in");
+};
+$("backBtn").onclick = ()=>{ if (S.idx > 0){ S.idx--; save(); renderSlide("back-in"); } };
+$("editBtn").onclick = ()=>{ S.idx = 0; save(); show("quiz"); renderSlide("in"); };
+$("waBtn").onclick = ()=> window.open("https://wa.me/?text=" + encodeURIComponent(summary()), "_blank");
+$("gsBtn").onclick = sendToSheet;
+
+initWelcome();
+</script>
+</body>
+</html>
