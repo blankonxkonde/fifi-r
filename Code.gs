@@ -18,9 +18,8 @@ const HEADERS = ["Waktu", "Nama", "Kategori", "Menu", "Rating", "Mau Coba (1-5)"
 
 function getSheet_() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  let sh = ss.getSheetByName(SHEET_NAME);
-  if (!sh) {
-    sh = ss.insertSheet(SHEET_NAME);
+  let sh = ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
+  if (sh.getLastRow() === 0) {
     sh.appendRow(HEADERS);
     sh.setFrozenRows(1);
     sh.getRange(1, 1, 1, HEADERS.length).setFontWeight("bold").setBackground("#f3f3f3");
