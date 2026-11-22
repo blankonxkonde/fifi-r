@@ -70,9 +70,16 @@
   .try .scale{color:var(--purple)}
   textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;font-size:14px;resize:none;min-height:44px;background:#fff}
   .note-hint{font-size:12px;color:var(--muted);margin:-8px 0 0}
-  .nav{display:flex;gap:10px;margin-top:14px}
-  .nav .btn{flex:1;padding:13px 0}
-  .nav .btn:disabled{opacity:.35;cursor:default}
+  .side{position:absolute;top:min(28vw,165px);width:48px;height:48px;border-radius:50%;border:0;background:var(--pink);color:#fff;font-size:22px;font-weight:700;cursor:pointer;box-shadow:0 8px 20px -8px rgba(232,87,126,.8);display:grid;place-items:center;z-index:2}
+  .side.prev{left:-68px;background:#fff;color:var(--ink);border:1.5px solid var(--line);box-shadow:none}
+  .side.next{right:-68px}
+  .side:disabled{opacity:.3;cursor:default}
+  .side:active{transform:scale(.94)}
+  @media (max-width:600px){
+    .side{width:42px;height:42px;font-size:19px;top:calc((100vw - 36px) * .375 - 21px)}
+    .side.prev{left:8px;background:rgba(255,255,255,.92)}
+    .side.next{right:8px}
+  }
   .skip{align-self:center;background:none;border:0;color:var(--muted);font:inherit;font-size:14px;text-decoration:underline;cursor:pointer}
 
   /* Done */
@@ -284,10 +291,8 @@ function renderSlide(dir="in"){
         </div>
       </div>
     </div>
-    <div class="nav">
-      <button class="btn ghost" id="prevBtn" ${i===0?"disabled":""}>← Sebelumnya</button>
-      <button class="btn" id="nextBtn">${i===ITEMS.length-1?"Selesai ✓":"Selanjutnya →"}</button>
-    </div>`;
+    <button class="side prev" id="prevBtn" aria-label="Sebelumnya" ${i===0?"disabled":""}>←</button>
+    <button class="side next" id="nextBtn" aria-label="${i===ITEMS.length-1?"Selesai":"Selanjutnya"}">${i===ITEMS.length-1?"✓":"→"}</button>`;
 
   const card = $("stage").firstElementChild;
   $("prevBtn").onclick = goPrev;
